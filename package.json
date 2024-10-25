@@ -11,15 +11,17 @@
     "url": "git@github.com:DependencyTrack/frontend.git"
   },
   "scripts": {
-    "start": "npm run serve",
-    "serve": "npm run prebuild && cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
-    "prebuild": "cross-env NODE_OPTIONS=--openssl-legacy-provider node update-embedded-version.js",
-    "build": "npm run prebuild && cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
-    "eslint": "eslint . --ext .js,.vue,.json,.md,.yaml --report-unused-disable-directives",
-    "eslint-fix": "eslint --ext .js,.vue,.json,.md,.yaml --fix . --report-unused-disable-directives",
-    "prettier": "prettier --check --cache '**/*.{js,vue,json,md,yaml}'",
-    "prettier-fix": "prettier --write --cache '**/*.{js,vue,json,md,yaml}'",
-    "vue-i18n-extract": "vue-i18n-extract report --ci"
+  "start": "npm run serve",
+  "serve": "npm run prebuild && cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
+  "prebuild": "cross-env NODE_OPTIONS=--openssl-legacy-provider node update-embedded-version.js",
+  "build": "npm run clean && npm run prebuild && cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build && npm run copy-locales",
+  "clean": "rimraf dist",
+  "copy-locales": "cp -R src/i18n/locales dist/locales",
+  "eslint": "eslint . --ext .js,.vue,.json,.md,.yaml --report-unused-disable-directives",
+  "eslint-fix": "eslint --ext .js,.vue,.json,.md,.yaml --fix . --report-unused-disable-directives",
+  "prettier": "prettier --check --cache '**/*.{js,vue,json,md,yaml}'",
+  "prettier-fix": "prettier --write --cache '**/*.{js,vue,json,md,yaml}'",
+  "vue-i18n-extract": "vue-i18n-extract report --ci"
   },
   "dependencies": {
     "@coreui/coreui": "2.1.16",
@@ -83,6 +85,7 @@
     "https-proxy-agent": "2.2.4",
     "prettier": "3.2.5",
     "prettier-plugin-sort-json": "4.0.0",
+    "rimraf": "^6.0.1",
     "sass": "1.72.0",
     "sass-loader": "8.0.2",
     "uuid": "9.0.1",

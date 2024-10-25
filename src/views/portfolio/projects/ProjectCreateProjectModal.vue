@@ -57,7 +57,52 @@
             :options="sortAvailableClassifiers"
             :label="$t('message.classifier')"
             :tooltip="$t('message.component_classifier_desc')"
+          />``
+          <!-- New Fields for Contact Information -->
+          <b-card-title class="mt-3 mb-2">
+            {{ $t('Vendor Contact Information') }}
+          </b-card-title>
+          <b-input-group-form-input
+            id="first-name-input"
+            input-group-size="mb-3"
+            type="text"
+            v-model="project.firstName"
+            lazy="true"
+            required="true"
+            feedback="true"
+            autofocus="false"
+            :label="$t('First Name')"
+            :tooltip="$t('Please enter the first name')"
+            :feedback-text="$t('First Name is required')"
           />
+
+          <b-input-group-form-input
+            id="last-name-input"
+            input-group-size="mb-3"
+            type="text"
+            v-model="project.lastName"
+            lazy="true"
+            required="true"
+            feedback="true"
+            autofocus="false"
+            :label="$t('Last Name')"
+            :tooltip="$t('Please enter the last name')"
+            :feedback-text="$t('Last Name is required')"
+          />
+
+          <b-input-group-form-input
+            id="email-input"
+            input-group-size="mb-3"
+            type="email"
+            v-model="project.email"
+            lazy="true"
+            required="true"
+            feedback="true"
+            autofocus="false"
+            :label="$t('Email Address')"
+            :tooltip="$t('Please enter a valid email address')"
+            :feedback-text="$t('Email is required')"
+          />          
           <b-input-group-form-select
             id="v-team-input"
             :required="requiresTeam"
@@ -268,7 +313,9 @@ export default {
       selectedLicense: '',
       selectedParent: null,
       availableParents: [],
-      project: { team: [] },
+      project: { team: [], firstName: '', // New field for First Name
+      lastName: '',  // New field for Last Name
+      email: ''},
       teams: [],
       tag: '', // The contents of a tag as its being typed into the vue-tag-input
       tags: [], // An array of tags bound to the vue-tag-input

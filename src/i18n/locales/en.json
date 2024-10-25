@@ -718,7 +718,7 @@
     "project_is_latest": "Is latest version",
     "project_metadata_supplier_name_desc": "The organization that supplied the BOM",
     "project_name": "Project Name",
-    "project_name_desc": "The name of the project or component as provided by the supplier",
+    "project_name_desc": "The name of the project or component as provided by the supplier - Hey I am here",
     "project_properties": "Project Properties",
     "project_reanalyze": "Reanalyze",
     "project_reanalyze_requested": "A Project Vulnerability Analysis has been requested. Project vulnerability data will be updated when the reanalysis task has completed.",
