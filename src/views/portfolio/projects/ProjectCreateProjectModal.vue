@@ -57,13 +57,15 @@
             :options="sortAvailableClassifiers"
             :label="$t('message.classifier')"
             :tooltip="$t('message.component_classifier_desc')"
-          />``
+          />
+          
           <!-- New Fields for Contact Information -->
           <b-card-title class="mt-3 mb-2">
             {{ $t('Vendor Contact Information') }}
           </b-card-title>
+
           <b-input-group-form-input
-            id="first-name-input"
+            id="vendor-contact-firstname-input"
             input-group-size="mb-3"
             type="text"
             v-model="project.firstName"
@@ -71,13 +73,13 @@
             required="true"
             feedback="true"
             autofocus="false"
-            :label="$t('First Name')"
-            :tooltip="$t('Please enter the first name')"
-            :feedback-text="$t('First Name is required')"
+            :label="$t('message.vendor_first_name')"
+            :tooltip="$t('message.enter_vendor_first_name')"
+            :feedback-text="$t('message.required_vendor_first_name')"
           />
 
           <b-input-group-form-input
-            id="last-name-input"
+            id="vendor-contact-lastname-input"
             input-group-size="mb-3"
             type="text"
             v-model="project.lastName"
@@ -85,13 +87,13 @@
             required="true"
             feedback="true"
             autofocus="false"
-            :label="$t('Last Name')"
-            :tooltip="$t('Please enter the last name')"
-            :feedback-text="$t('Last Name is required')"
+            :label="$t('message.vendor_last_name')"
+            :tooltip="$t('message.enter_vendor_last_name')"
+            :feedback-text="$t('message.required_vendor_last_name')"
           />
 
           <b-input-group-form-input
-            id="email-input"
+            id="vendor-contact-email-input"
             input-group-size="mb-3"
             type="email"
             v-model="project.email"
@@ -99,10 +101,16 @@
             required="true"
             feedback="true"
             autofocus="false"
-            :label="$t('Email Address')"
-            :tooltip="$t('Please enter a valid email address')"
-            :feedback-text="$t('Email is required')"
-          />          
+            :label="$t('message.vendor_email')"
+            :tooltip="$t('message.enter_vendor_email')"
+            :feedback-text="$t('message.required_vendor_email')"
+          />
+          </b-card>
+
+          
+          <!-- End of New Fields for Contact Information -->
+
+
           <b-input-group-form-select
             id="v-team-input"
             :required="requiresTeam"
@@ -159,7 +167,6 @@
               class="mw-100 bg-transparent text-lowercase"
             />
           </b-form-group>
-        </b-card>
       </b-tab>
       <b-tab class="body-bg-color" style="border: 0; padding: 0">
         <template v-slot:title
@@ -386,6 +393,10 @@ export default {
       this.readOnlyProjectVersion = value;
     },
     createProject: function () {
+      if (!this.project.firstName || !this.project.lastName || !this.project.email) {
+        this.$toastr.w(this.$t('message.required_fields_missing'));
+        return; // Stop submission if fields are empty
+      }
       let url = `${this.$api.BASE_URL}/${this.$api.URL_PROJECT}`;
       let tagsNode = [];
       let choosenTeams = this.teams.filter((team) => {
@@ -419,8 +430,11 @@ export default {
           isLatest: this.project.isLatest,
         })
         .then((response) => {
+          this.project.uuid = response.data.uuid; // Capture the UUID of the newly created project
           this.$emit('refreshTable');
           this.$toastr.s(this.$t('message.project_created'));
+          this.saveContactAsProperties(); // Save contact info as properties
+          this.resetValues(); // Clear fields after creation
           this.selectedParent = null;
           this.availableParents = [{ value: null, text: '' }];
         })
@@ -430,6 +444,37 @@ export default {
         .finally(() => {
           this.$root.$emit('bv::hide::modal', 'projectCreateProjectModal');
         });
+    },
+    
+    saveContactAsProperties: function () {
+      const properties = [
+        {
+          groupName: 'VendorContact',
+          propertyName: 'VendorFirstName',
+          propertyValue: this.project.firstName,
+        },
+        {
+          groupName: 'VendorContact',
+          propertyName: 'VendorLastName',
+          propertyValue: this.project.lastName,
+        },
+        {
+          groupName: 'VendorContact',
+          propertyName: 'VendorEmail',
+          propertyValue: this.project.email,
+        },
+      ];
+
+      properties.forEach((property) => {
+        this.axios
+          .post(`${this.$api.BASE_URL}/project/${this.project.uuid}/property`, property)
+          .then(() => {
+            this.$toastr.s(this.$t('message.property_created'));
+          })
+          .catch(() => {
+            this.$toastr.w(this.$t('condition.unsuccessful_action'));
+          });
+      });
     },
     retrieveLicenses: function () {
       return new Promise((resolve) => {
@@ -463,6 +508,9 @@ export default {
       this.project = {
         team: [],
       };
+      this.project.firstName = '';
+      this.project.lastName = '';
+      this.project.email = '';
       this.tag = '';
       this.tags = [];
       this.selectedParent = null;

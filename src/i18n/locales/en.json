@@ -318,6 +318,15 @@
     "zh": "Chinese"
   },
   "message": {
+    "vendor_first_name": "Vendor First Name",
+    "vendor_last_name": "Vendor Last Name",
+    "vendor_email": "Vendor Email",
+    "enter_vendor_first_name": "Please enter the vendor's first name",
+    "enter_vendor_last_name": "Please enter the vendor's last name",
+    "enter_vendor_email": "Please enter the vendor's email",
+    "required_vendor_first_name": "Vendor first name is required",
+    "required_vendor_last_name": "Vendor last name is required",
+    "required_vendor_email": "Vendor email is required",
     "about": "About",
     "active": "Active",
     "add": "Add",
