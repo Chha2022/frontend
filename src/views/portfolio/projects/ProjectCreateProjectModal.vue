@@ -61,7 +61,7 @@
           
           <!-- New Fields for Contact Information -->
           <b-card-title class="mt-3 mb-2">
-            {{ $t('Vendor Contact Information') }}
+            {{ 'Vendor Contact Information' }}
           </b-card-title>
 
           <b-input-group-form-input
@@ -320,9 +320,16 @@ export default {
       selectedLicense: '',
       selectedParent: null,
       availableParents: [],
-      project: { team: [], firstName: '', // New field for First Name
-      lastName: '',  // New field for Last Name
-      email: ''},
+      project: {
+        name: '',
+        version: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        classifier: '',
+        team: [],
+        description: '',
+      },
       teams: [],
       tag: '', // The contents of a tag as its being typed into the vue-tag-input
       tags: [], // An array of tags bound to the vue-tag-input
@@ -445,34 +452,51 @@ export default {
           this.$root.$emit('bv::hide::modal', 'projectCreateProjectModal');
         });
     },
-    
-    saveContactAsProperties: function () {
+
+    saveContactAsProperties() {
+      // Ensure the project UUID is available
+      if (!this.project.uuid) return;
+
+      // Define the properties to save in the specified format
       const properties = [
         {
           groupName: 'VendorContact',
           propertyName: 'VendorFirstName',
           propertyValue: this.project.firstName,
+          propertyType: 'STRING', // Assuming the property type is STRING
+          description: 'Vendor First Name',
         },
         {
           groupName: 'VendorContact',
           propertyName: 'VendorLastName',
           propertyValue: this.project.lastName,
+          propertyType: 'STRING', // Assuming the property type is STRING
+          description: 'Vendor Last Name',
         },
         {
           groupName: 'VendorContact',
           propertyName: 'VendorEmail',
           propertyValue: this.project.email,
+          propertyType: 'STRING', // Assuming the property type is STRING
+          description: 'Vendor Email Address',
         },
       ];
 
-      properties.forEach((property) => {
+      // Construct the URL using the project UUID
+      const url = `${this.$api.BASE_URL}/${this.$api.URL_PROJECT}/${this.project.uuid}/property`;
+
+      // Iterate over the properties and make API calls to save them
+      properties.forEach(property => {
         this.axios
-          .post(`${this.$api.BASE_URL}/project/${this.project.uuid}/property`, property)
-          .then(() => {
-            this.$toastr.s(this.$t('message.property_created'));
+          .put(url, property)
+          .then(response => {
+            console.log('Response received:', response.data);
+            this.$toastr.s(this.$t('message.property_created')); // Show success message
           })
-          .catch(() => {
-            this.$toastr.w(this.$t('condition.unsuccessful_action'));
+          .catch(error => {
+            // Log detailed error information
+            console.error('Error saving property:', error.response ? error.response.data : error.message);
+            this.$toastr.w(this.$t('condition.unsuccessful_action')); // Show error message
           });
       });
     },
