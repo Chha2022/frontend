@@ -318,6 +318,9 @@
     "zh": "Chinese"
   },
   "message": {
+    "vendor_company_name": "Vendor Company Name",
+    "enter_vendor_company_name": "Please enter the vendor company's name",
+    "required_vendor_company_name": "Vendor company name is required",
     "vendor_first_name": "Vendor First Name",
     "vendor_last_name": "Vendor Last Name",
     "vendor_email": "Vendor Email",
@@ -715,7 +718,7 @@
     "policy_violations_by_state": "Policy Violations by State",
     "portfolio": "Portfolio",
     "portfolio_statistics": "Portfolio Statistics",
-    "portfolio_vulnerabilities": "Portfolio Vulnerabilities",
+    "portfolio_vulnerabilities": "3rd Party Vendor Vulnerabilities",
     "profile_update": "Update Profile",
     "profile_updated": "Profile updated",
     "project_cloning_in_progress": "The project is being created with the cloning options specified",

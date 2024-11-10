@@ -61,8 +61,22 @@
           
           <!-- New Fields for Contact Information -->
           <b-card-title class="mt-3 mb-2">
-            {{ 'Vendor Contact Information' }}
+            3rd Party Supplier Contact Information
           </b-card-title>
+
+          <b-input-group-form-input
+            id="3rdparty-supplier-name-input"
+            input-group-size="mb-3"
+            type="text"
+            v-model="project.thirtPartySupplierName"
+            lazy="true"
+            required="true"
+            feedback="true"
+            autofocus="false"
+            :label="$t('message.vendor_company_name')"
+            :tooltip="$t('message.enter_vendor_company_name')"
+            :feedback-text="$t('message.required_vendor_company_name')"
+          />
 
           <b-input-group-form-input
             id="vendor-contact-firstname-input"
@@ -323,6 +337,7 @@ export default {
       project: {
         name: '',
         version: '',
+        thirtPartySupplierName: '',
         firstName: '',
         lastName: '',
         email: '',
@@ -400,7 +415,7 @@ export default {
       this.readOnlyProjectVersion = value;
     },
     createProject: function () {
-      if (!this.project.firstName || !this.project.lastName || !this.project.email) {
+      if (!this.project.thirtPartySupplierName || !this.project.firstName || !this.project.lastName || !this.project.email) {
         this.$toastr.w(this.$t('message.required_fields_missing'));
         return; // Stop submission if fields are empty
       }
@@ -459,6 +474,13 @@ export default {
 
       // Define the properties to save in the specified format
       const properties = [
+        {
+          groupName: 'VendorContact',
+          propertyName: 'VendorCompanyName',
+          propertyValue: this.project.thirtPartySupplierName,
+          propertyType: 'STRING', // Assuming the property type is STRING
+          description: 'Vendor Company Name',
+        },
         {
           groupName: 'VendorContact',
           propertyName: 'VendorFirstName',
@@ -532,6 +554,7 @@ export default {
       this.project = {
         team: [],
       };
+      this.project.thirtPartySupplierName = '';
       this.project.firstName = '';
       this.project.lastName = '';
       this.project.email = '';
